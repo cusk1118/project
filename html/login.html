@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>로그인</title>
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+  <form id="loginForm" method="post">
+    <label for="username">사용자 이름:</label><br>
+    <input type="text" id="username" name="username"><br>
+    <label for="password">비밀번호:</label><br>
+    <input type="password" id="password" name="password">
+    <br>
+    <br>
+    <button type="submit">로그인</button>
+    <button><a href="./new.html">회원가입</a></button>
+  </form>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+        //return;
+        event.preventDefault(); // 기본 제출 동작 방지
+    
+      // 사용자명과 비밀번호 가져오기
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+
+      // 로그인 요청 처리
+      fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ username: username, password: password })
+      })
+      .then(function(response) {
+        if (response.status == 200) {
+          // 로그인 성공
+          console.log("로그인 성공");
+          return response.text();
+        } else {
+          // 로그인 실패
+          console.log("로그인 실패");
+          throw new Error("로그인 실패");
+        }
+      })
+      .then(function(data) {
+        alert(data)
+        if(data.includes('성공')){
+            location = '/';
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+    });
+
+  </script>
+</body>
+</html>
